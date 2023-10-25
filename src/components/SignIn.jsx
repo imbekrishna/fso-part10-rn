@@ -4,6 +4,8 @@ import FormikInput from './FormikTextInput';
 import Text from './Text';
 import theme from '../theme';
 
+import useSignIn from '../hooks/useSignIn';
+
 import * as yup from 'yup';
 
 const initialValues = {
@@ -33,12 +35,27 @@ const validaionSchema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    console.log(username, password);
+
+    try {
+      const { data } = await signIn({ username, password });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={{ backgroundColor: 'white', padding: 20 }}>
       <Formik
         initialValues={initialValues}
         validationSchema={validaionSchema}
-        onSubmit={() => console.log('submitted')}
+        onSubmit={onSubmit}
       >
         {({ handleSubmit }) => (
           <View style={{ display: 'flex', rowGap: 10 }}>
