@@ -17,7 +17,7 @@ const useSignIn = () => {
         },
       });
 
-      authStorage.setAccessToken(data.authenticate.accessToken);
+      await authStorage.setAccessToken(data.authenticate.accessToken);
       navigate('/');
       client.resetStore();
     } catch (error) {
