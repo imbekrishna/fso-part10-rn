@@ -40,8 +40,6 @@ const SignIn = () => {
   const onSubmit = async (values) => {
     const { username, password } = values;
 
-    console.log(username, password);
-
     try {
       const { data } = await signIn({ username, password });
       console.log(data);
