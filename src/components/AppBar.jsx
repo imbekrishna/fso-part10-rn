@@ -43,6 +43,11 @@ const AppBar = () => {
             Repositories
           </Text>
         </Link>
+        <Link to="/review">
+          <Text fontWeight="bold" fontSize="heading" style={styles.tabStyle}>
+            Create a review
+          </Text>
+        </Link>
         {data.data.me !== null ? (
           <SignOutButton signOut={signOut} />
         ) : (

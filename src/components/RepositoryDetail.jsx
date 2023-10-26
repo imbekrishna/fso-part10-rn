@@ -87,6 +87,7 @@ const RepositoryDetail = () => {
     variables: {
       repositoryId: params.repoId,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   if (loading) {
