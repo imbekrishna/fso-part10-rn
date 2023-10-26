@@ -1,8 +1,7 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import { Formik } from 'formik';
 import FormikInput from './FormikTextInput';
-import Text from './Text';
-import theme from '../theme';
+import Button from './Button';
 
 import useSignIn from '../hooks/useSignIn';
 
@@ -12,22 +11,6 @@ const initialValues = {
   username: '',
   password: '',
 };
-
-const styles = StyleSheet.create({
-  // ...
-  appButtonContainer: {
-    elevation: 8,
-    backgroundColor: theme.colors.primary,
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    height: 50,
-  },
-  appButtonText: {
-    color: '#fff',
-    alignSelf: 'center',
-  },
-});
 
 const validaionSchema = yup.object().shape({
   username: yup.string().required('Username is required'),
@@ -50,15 +33,7 @@ export const SignInForm = ({ onSubmit }) => {
               placeholder="Password"
               secureTextEntry={true}
             />
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={handleSubmit}
-              style={styles.appButtonContainer}
-            >
-              <Text fontSize="heading" style={styles.appButtonText}>
-                Sign in
-              </Text>
-            </TouchableOpacity>
+            <Button handleSubmit={handleSubmit} title="Sign In" />
           </View>
         )}
       </Formik>
