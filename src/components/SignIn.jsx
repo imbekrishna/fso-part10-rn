@@ -34,19 +34,7 @@ const validaionSchema = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-
-  const onSubmit = async (values) => {
-    const { username, password } = values;
-
-    try {
-      await signIn({ username, password });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+export const SignInForm = ({ onSubmit }) => {
   return (
     <View style={{ backgroundColor: 'white', padding: 20 }}>
       <Formik
@@ -60,7 +48,6 @@ const SignIn = () => {
             <FormikInput
               name="password"
               placeholder="Password"
-              type="password"
               secureTextEntry={true}
             />
             <TouchableOpacity
@@ -77,6 +64,22 @@ const SignIn = () => {
       </Formik>
     </View>
   );
+};
+
+const SignIn = () => {
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      await signIn({ username, password });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return <SignInForm onSubmit={onSubmit} />;
 };
 
 export default SignIn;
