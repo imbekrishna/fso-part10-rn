@@ -18,6 +18,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.background,
   },
+  mainContainer: {
+    flex: 1,
+  },
 });
 
 const SearchHeader = ({ refetch }) => {
@@ -45,7 +48,7 @@ const SearchHeader = ({ refetch }) => {
     <Searchbar
       style={{
         borderRadius: 5,
-        backgroundColor: theme.colors.formBackground
+        backgroundColor: theme.colors.formBackground,
       }}
       placeholder="Search"
       onChangeText={onChangeSearch}
@@ -116,7 +119,7 @@ const FilterHeader = ({ refetch }) => {
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({ repositories, onEndReach }) => {
   const navigate = useNavigate();
 
   const repositoryNodes = repositories
@@ -132,12 +135,21 @@ export const RepositoryListContainer = ({ repositories }) => {
           <RepositoryItem key={item.id} item={item} />
         </Pressable>
       )}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };
 
 const RepositoryList = () => {
-  const { repositories, refetch } = useRepository();
+  const { repositories, refetch, fetchMore } = useRepository({
+    first: 3,
+  });
+
+  const onEndReach = () => {
+    console.log('fetching more');
+    fetchMore();
+  };
 
   return (
     <View>
@@ -145,7 +157,10 @@ const RepositoryList = () => {
         <SearchHeader refetch={refetch} />
         <FilterHeader refetch={refetch} />
       </View>
-      <RepositoryListContainer repositories={repositories} />
+      <RepositoryListContainer
+        repositories={repositories}
+        onEndReach={onEndReach}
+      />
     </View>
   );
 };

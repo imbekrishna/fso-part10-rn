@@ -17,6 +17,12 @@ export const GET_REPOSITORIES = gql`
           ...RepositoryDetails
         }
       }
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
     }
   }
 
