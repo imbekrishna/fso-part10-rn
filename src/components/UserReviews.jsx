@@ -2,6 +2,9 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import React from 'react';
 import theme from '../theme';
 import ReviewItem from './ReviewItem';
+import { GET_ME } from '../graphql/queries';
+import { useQuery } from '@apollo/client';
+import Text from './Text';
 
 export const styles = StyleSheet.create({
   listContainer: {
@@ -38,53 +41,19 @@ export const styles = StyleSheet.create({
   },
 });
 
-const data = {
-  me: {
-    reviews: {
-      edges: [
-        {
-          node: {
-            id: 'bbe42984-051b-4a01-b45d-b8d29c32200c.async-library.react-async',
-            user: { username: 'krishna' },
-            rating: 85,
-            text: 'Lorem ipsum dolor sit amet, per brute apeirian ei. Malis facilisis vel ex, ex vivendo signiferumque nam, nam ad natum electram constituto. Causae latine at sea, ex nec ullum ceteros, est ut dicant splendide. Omnis electram ullamcorper est ut.',
-            createdAt: '2023-10-25T11:39:33.970Z',
-          },
-        },
-        {
-          node: {
-            id: 'bbe42984-051b-4a01-b45d-b8d29c32200c.django.django',
-            user: { username: 'krishna' },
-            rating: 78,
-            text: 'Lorem ipsum dolor sit amet, per brute apeirian ei. Malis facilisis vel ex, ex vivendo signiferumque nam, nam ad natum electram constituto. Causae latine at sea, ex nec ullum ceteros, est ut dicant splendide. Omnis electram ullamcorper est ut.',
-            createdAt: '2023-10-25T11:39:33.970Z',
-          },
-        },
-        {
-          node: {
-            id: 'bbe42984-051b-4a01-b45d-b8d29c32200c.jaredpalmer.formik',
-            user: { username: 'krishna' },
-            rating: 95,
-            text: 'Lorem ipsum dolor sit amet, per brute apeirian ei. Malis facilisis vel ex, ex vivendo signiferumque nam, nam ad natum electram constituto. Causae latine at sea, ex nec ullum ceteros, est ut dicant splendide. Omnis electram ullamcorper est ut.',
-            createdAt: '2023-10-25T11:39:33.970Z',
-          },
-        },
-        {
-          node: {
-            id: 'bbe42984-051b-4a01-b45d-b8d29c32200c.rails.rails',
-            user: { username: 'krishna' },
-            rating: 99,
-            text: 'Lorem ipsum dolor sit amet, per brute apeirian ei. Malis facilisis vel ex, ex vivendo signiferumque nam, nam ad natum electram constituto. Causae latine at sea, ex nec ullum ceteros, est ut dicant splendide. Omnis electram ullamcorper est ut.',
-            createdAt: '2023-10-25T11:39:33.970Z',
-          },
-        },
-      ],
-    },
-  },
-};
-
 const ItemSeparator = () => <View style={styles.separator} />;
+
 const UserReviews = () => {
+  const { data, loading } = useQuery(GET_ME, {
+    variables: {
+      includeReviews: true,
+    },
+  });
+
+  if (loading) {
+    return <Text>Loading</Text>;
+  }
+
   const reviewNodes = data.me
     ? data.me.reviews.edges.map((edge) => edge.node)
     : [];
