@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   tabStyle: {
     color: 'white',
-    marginRight: 10,
+    marginRight: 20
   },
 });
 
@@ -52,6 +52,15 @@ const AppBar = () => {
                 style={styles.tabStyle}
               >
                 Create a review
+              </Text>
+            </Link>
+            <Link to="/myReviews">
+              <Text
+                fontWeight="bold"
+                fontSize="heading"
+                style={styles.tabStyle}
+              >
+                My reviews
               </Text>
             </Link>
             <SignOutButton signOut={signOut} />

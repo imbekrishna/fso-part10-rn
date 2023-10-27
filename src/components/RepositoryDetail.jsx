@@ -7,9 +7,9 @@ import RepositoryItem from './RepositoryItem';
 import Text from './Text';
 import * as Linking from 'expo-linking';
 import theme from '../theme';
-import { format } from 'date-fns';
+import ReviewItem from './ReviewItem';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: theme.colors.mainBackground,
   },
@@ -58,27 +58,6 @@ const RepositoryInfo = ({ repository }) => {
   );
 };
 
-const ReviewItem = ({ review }) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.reviewBadge}>
-        <Text style={styles.ratingStyle} fontSize="heading" fontWeight="bold">
-          {review.rating}
-        </Text>
-      </View>
-      <View style={styles.contentContainer}>
-        <Text fontSize="heading" fontWeight="bold">
-          {review.user.username}
-        </Text>
-        <Text color="textSecondary" fontSize="subheading">
-          {format(Date.parse(review.createdAt), 'dd.MM.yyyy')}
-        </Text>
-        <Text fontSize="body">{review.text}</Text>
-      </View>
-    </View>
-  );
-};
-
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryDetail = () => {
@@ -112,7 +91,6 @@ const RepositoryDetail = () => {
         ListHeaderComponent={() => (
           <RepositoryInfo repository={data.repository} />
         )}
-        // ...
       />
     </View>
   );
