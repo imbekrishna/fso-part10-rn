@@ -62,12 +62,32 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryDetail = () => {
   const params = useParams();
-  const { data, loading } = useQuery(GET_REPOSITORY, {
+
+  const { data, loading, fetchMore } = useQuery(GET_REPOSITORY, {
     variables: {
+      first: 2,
       repositoryId: params.repoId,
     },
     fetchPolicy: 'cache-and-network',
   });
+
+  const handleFetchMore = () => {
+    const canFetchMore =
+      !loading && data?.repository.reviews.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
+    }
+
+    console.log('--- fetching more ---');
+
+    fetchMore({
+      variables: {
+        repositoryId: params.repoId,
+        after: data.repository.reviews.pageInfo.endCursor,
+      },
+    });
+  };
 
   if (loading) {
     return (
@@ -91,6 +111,8 @@ const RepositoryDetail = () => {
         ListHeaderComponent={() => (
           <RepositoryInfo repository={data.repository} />
         )}
+        onEndReached={handleFetchMore}
+        onEndReachedThreshold={0.5}
       />
     </View>
   );
