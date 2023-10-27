@@ -2,7 +2,7 @@ import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Constants from 'expo-constants';
 import Text from './Text';
 import theme from '../theme';
-import { Link } from 'react-router-native';
+import { Link, useNavigate } from 'react-router-native';
 import { useApolloClient, useQuery } from '@apollo/client';
 import { GET_ME } from '../graphql/queries';
 import useAuthStorage from '../hooks/useAuthStorage';
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   tabStyle: {
     color: 'white',
-    marginRight: 20
+    marginRight: 20,
   },
 });
 
@@ -25,10 +25,12 @@ const AppBar = () => {
   const data = useQuery(GET_ME);
   const authStorage = useAuthStorage();
   const client = useApolloClient();
+  const navigate = useNavigate();
 
   const signOut = async () => {
     await authStorage.removeAccessToken('auth:accessToken');
     client.resetStore();
+    navigate('/');
   };
 
   if (data.loading) {

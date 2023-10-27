@@ -9,6 +9,7 @@ import Text from './Text';
 export const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: theme.colors.mainBackground,
+    flex: 1,
   },
   container: {
     display: 'flex',
@@ -44,7 +45,7 @@ export const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const UserReviews = () => {
-  const { data, loading } = useQuery(GET_ME, {
+  const { data, loading, refetch } = useQuery(GET_ME, {
     variables: {
       includeReviews: true,
     },
@@ -61,7 +62,13 @@ const UserReviews = () => {
     <View style={styles.listContainer}>
       <FlatList
         data={reviewNodes}
-        renderItem={({ item }) => <ReviewItem review={item} />}
+        renderItem={({ item }) => (
+          <ReviewItem
+            review={item}
+            refetchReviews={refetch}
+            showAction={true}
+          />
+        )}
         keyExtractor={({ id }) => id}
         ItemSeparatorComponent={ItemSeparator}
       />
