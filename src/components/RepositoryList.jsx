@@ -2,21 +2,57 @@ import { View, StyleSheet, FlatList, Pressable } from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import useRepository from '../hooks/useRepositories';
 import { useNavigate } from 'react-router-native';
-import { Button, Menu } from 'react-native-paper';
+import { Button, Menu, Searchbar } from 'react-native-paper';
 import theme from '../theme';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
+import Text from './Text';
 
 const styles = StyleSheet.create({
   separator: {
     height: 10,
   },
   formContainer: {
-    backgroundColor: theme.colors.formBackground,
-    padding: 10,
+    backgroundColor: theme.colors.mainBackground,
+    padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.background,
   },
 });
+
+const SearchHeader = ({ refetch }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [value] = useDebounce(searchQuery, 500);
+  const onChangeSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        await refetch({
+          searchKeyword: value,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getData();
+  }, [value]);
+
+  return (
+    <Searchbar
+      style={{
+        borderRadius: 5,
+        backgroundColor: theme.colors.formBackground
+      }}
+      placeholder="Search"
+      onChangeText={onChangeSearch}
+      value={searchQuery}
+    />
+  );
+};
 
 const FilterHeader = ({ refetch }) => {
   const [visible, setVisible] = useState(false);
@@ -34,11 +70,25 @@ const FilterHeader = ({ refetch }) => {
   };
 
   return (
-    <View style={styles.formContainer}>
+    <View>
       <Menu
         visible={visible}
         onDismiss={closeMenu}
-        anchor={<Button onPress={openMenu}>{buttonTitle}</Button>}
+        anchor={
+          <Button
+            icon="menu-down"
+            contentStyle={{
+              flexDirection: 'row-reverse',
+              justifyContent: 'space-between',
+            }}
+            style={{
+              marginTop: 20,
+            }}
+            onPress={openMenu}
+          >
+            <Text fontSize="heading">{buttonTitle}</Text>
+          </Button>
+        }
       >
         <Menu.Item title="Select an item..." disabled />
         <Menu.Item
@@ -91,8 +141,11 @@ const RepositoryList = () => {
 
   return (
     <View>
-      <FilterHeader refetch={refetch} />
-      <RepositoryListContainer repositories={repositories}/>
+      <View style={styles.formContainer}>
+        <SearchHeader refetch={refetch} />
+        <FilterHeader refetch={refetch} />
+      </View>
+      <RepositoryListContainer repositories={repositories} />
     </View>
   );
 };
